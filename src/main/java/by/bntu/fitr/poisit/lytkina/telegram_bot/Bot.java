@@ -33,8 +33,9 @@ public class Bot extends TelegramLongPollingBot {
                 String text = message.getText();
 
                 if (text.equals("/hello")) {
-                    response = "Hello you too, " + message.getFrom().getFirstName() + "! If you want to flip a coin"
-                            + "\nClick /flip to start:)";
+                    response = "Hello you too, " + message.getFrom().getFirstName() + "! \nIf you want to flip a coin --> " +
+                            "Click /flip to start:) \nIf you want to go moodle --> click /moodle \n" +
+                            "If you want to go GoogleTranstate --> clock /translate";
 
                 } else if (text.equals("/bye")) {
                     response = "OK. See you soon)";
@@ -46,6 +47,10 @@ public class Bot extends TelegramLongPollingBot {
                     }else {
                         response = "TAILS (решка)";
                     }
+                }else if (text.equals("/moodle")){
+                    response = "https://moodle.jrr.by/";
+                }else if (text.equals("/translate")){
+                    response = "https://translate.google.com/?hl=ru&tab=TT&authuser=0";
                 }
             }
             sendMessage(message, response);
