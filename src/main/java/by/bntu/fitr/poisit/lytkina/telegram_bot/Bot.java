@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Random;
+
 @Component
 public class Bot extends TelegramLongPollingBot {
 
@@ -26,17 +28,27 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Message message = update.getMessage();
+            String response = "I don't know what i should do:(";
             if (message.getText() != null) {
                 String text = message.getText();
-                if (text.equals("hello")) {
-                    String response = "Hello you too, " + message.getFrom().getFirstName();
 
-                    sendMessage(message, response);
-                } else if (text.equals("bye")) {
-                    String response = "OK. See you soon)";
-                    sendMessage(message, response);
+                if (text.equals("/hello")) {
+                    response = "Hello you too, " + message.getFrom().getFirstName() + "! If you want to flip a coin"
+                            + "\nClick /flip to start:)";
+
+                } else if (text.equals("/bye")) {
+                    response = "OK. See you soon)";
+
+                } else if (text.equals("/flip")){
+                    int number = getRandomNumber();
+                    if(number == 0) {
+                        response = "HEADS (орел)";
+                    }else {
+                        response = "TAILS (решка)";
+                    }
                 }
             }
+            sendMessage(message, response);
         }
     }
     public void sendMessage(Message message, String response){
@@ -49,5 +61,11 @@ public class Bot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getRandomNumber(){
+        Random random = new Random();
+        int number = random.nextInt(2);
+        return  number;
     }
 }
