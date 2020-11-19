@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 public class ButtonHandler {
-    public InlineKeyboardMarkup getInlineKeyboardMarkup(){
+    public InlineKeyboardMarkup getInlineKeyboardMarkup() {
         final InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
@@ -32,6 +32,7 @@ public class ButtonHandler {
         inlineKeyboardMarkup.setKeyboard(keyboard);
         return inlineKeyboardMarkup;
     }
+
     public ReplyKeyboardMarkup getMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
@@ -55,10 +56,12 @@ public class ButtonHandler {
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
+
     public SendMessage getButtonInputData(long chatId, String text) {
         return new SendMessage(chatId, text).setReplyMarkup(getInlineKeyboardMarkup());
     }
-    public SendMessage getButtonMainMenu(long chatId, String text){
+
+    public SendMessage getButtonMainMenu(long chatId, String text) {
         return new SendMessage(chatId, text).setReplyMarkup(getMainMenuKeyboard());
     }
 }
