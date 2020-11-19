@@ -8,7 +8,6 @@ public enum BotCommand {
     ASK_AGE,
     ASK_NAME,
     ASK_ADDRESS,
-    RETURN_TO_MAIN_MENU,
     DOWNLOAD_PHOTO;
 
     String command;

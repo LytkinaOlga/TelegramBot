@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static by.bntu.fitr.poisit.lytkina.telegram_bot.enums.BotCommand.INPUT_DATA;
 import static by.bntu.fitr.poisit.lytkina.telegram_bot.enums.BotCommand.START;
 
 @Service
@@ -30,9 +31,6 @@ public class RequestDispatcher {
         switch (getCommand(update)) {
             case START:
                 messageService.sendMessage(buttonHandler.getButtonMainMenu(update.getMessage().getChatId(), "Привет!"));
-                break;
-            case RETURN_TO_MAIN_MENU:
-                messageService.sendMessage(buttonHandler.getButtonMainMenu(update.getMessage().getChatId(), "Данные сохранены"));
                 break;
             case INPUT_DATA:
                 messageService.sendMessage(buttonHandler.getButtonInputData(update.getMessage().getChatId(), "Выберите действие"));
@@ -85,15 +83,15 @@ public class RequestDispatcher {
                 } else if (state.equals("askName")) {
                     name = text;
                     person.setName(name);
-                    return START;
+                    return BotCommand.INPUT_DATA;
                 } else if (state.equals("askAge")) {
                     age = text;
                     person.setAge(age);
-                    return BotCommand.RETURN_TO_MAIN_MENU;
+                    return BotCommand.INPUT_DATA;
                 } else if (state.equals("askAddress")) {
                     address = text;
                     person.setAddress(address);
-                    return BotCommand.RETURN_TO_MAIN_MENU;
+                    return BotCommand.INPUT_DATA;
                 }
 
             } else if (update.getMessage().hasPhoto()) {
