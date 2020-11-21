@@ -5,7 +5,10 @@ public enum BotCommand {
     INPUT_DATA,
     PRINT_INF,
     SENT_PHOTO,
-    ASK_AGE;
+    ASK_AGE,
+    ASK_NAME,
+    ASK_ADDRESS,
+    DOWNLOAD_PHOTO;
 
     String command;
 
