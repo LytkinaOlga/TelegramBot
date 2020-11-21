@@ -9,9 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static by.bntu.fitr.poisit.lytkina.telegram_bot.enums.BotCommand.INPUT_DATA;
-import static by.bntu.fitr.poisit.lytkina.telegram_bot.enums.BotCommand.START;
-
 @Service
 public class RequestDispatcher {
 
@@ -21,6 +18,8 @@ public class RequestDispatcher {
     ButtonHandler buttonHandler;
     @Autowired
     Person person;
+    @Autowired
+    PersonService personService;
 
     private static String name = "";
     private static String age = "";
@@ -34,6 +33,7 @@ public class RequestDispatcher {
                 break;
             case INPUT_DATA:
                 messageService.sendMessage(buttonHandler.getButtonInputData(update.getMessage().getChatId(), "Выберите действие"));
+                state = "getId";
                 break;
             case ASK_NAME:
                 messageService.sendMessage(update.getCallbackQuery().getMessage(), "Введите имя");
@@ -48,7 +48,10 @@ public class RequestDispatcher {
                 state = "askAddress";
                 break;
             case PRINT_INF:
-                messageService.sendMessage(update.getMessage(), messageService.printInf(person));
+                if (personService.checkIfPersonDataExist(update.getMessage())) {
+                    person = personService.findPersonById(update);
+                    messageService.sendMessage(update.getMessage(), personService.printInf(person));
+                } else messageService.sendMessage(update.getMessage(), personService.printInf(person));
                 break;
             case SENT_PHOTO:
                 messageService.sendMessage(update.getMessage(), "Загрузите фото");
@@ -83,14 +86,17 @@ public class RequestDispatcher {
                 } else if (state.equals("askName")) {
                     name = text;
                     person.setName(name);
+                    personService.savePerson(person);
                     return BotCommand.INPUT_DATA;
                 } else if (state.equals("askAge")) {
                     age = text;
                     person.setAge(age);
+                    personService.savePerson(person);
                     return BotCommand.INPUT_DATA;
                 } else if (state.equals("askAddress")) {
                     address = text;
                     person.setAddress(address);
+                    personService.savePerson(person);
                     return BotCommand.INPUT_DATA;
                 }
 
@@ -100,6 +106,10 @@ public class RequestDispatcher {
 
         } else if (update.hasCallbackQuery()) {
             CallbackQuery buttonQuery = update.getCallbackQuery();
+            if (state.equals("getId")) {
+                person.setId(update.getCallbackQuery().getFrom().getId());
+                personService.savePerson(person);
+            }
             if (buttonQuery.getData().equals("Input name")) {
                 return BotCommand.ASK_NAME;
             } else if (buttonQuery.getData().equals("Input age")) {
